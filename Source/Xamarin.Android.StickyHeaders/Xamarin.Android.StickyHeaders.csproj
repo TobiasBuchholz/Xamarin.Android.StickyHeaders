@@ -69,7 +69,7 @@
     <Compile Include="SectionHeader.cs" />
     <Compile Include="SectionItem.cs" />
     <Compile Include="SectionType.cs" />
-    <Compile Include="StickyHeaderAdapter.cs" />
+    <Compile Include="IStickyHeaderAdapter.cs" />
     <Compile Include="StickyHeaderItemDecoration.cs" />
   </ItemGroup>
   <ItemGroup>

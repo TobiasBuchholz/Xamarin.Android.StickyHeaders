@@ -5,7 +5,7 @@ using AndroidX.RecyclerView.Widget;
 
 namespace Xamarin.Android.StickyHeaders
 {
-    public class SectionAdapter : StickyHeaderAdapter
+    public class SectionAdapter : RecyclerView.Adapter, IStickyHeaderAdapter
     {
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
@@ -28,7 +28,7 @@ namespace Xamarin.Android.StickyHeaders
             }
         }
         
-        public override int GetHeaderPositionForItem(int itemPosition)
+        public int GetHeaderPositionForItem(int itemPosition)
         {
             return Items[itemPosition].SectionPosition;
         }
@@ -38,12 +38,12 @@ namespace Xamarin.Android.StickyHeaders
             return (int) Items[position].Type;
         }
 
-        public override void OnBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int headerPosition)
+        public void OnBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int headerPosition)
         {
             ((HeaderViewHolder) viewHolder).TextView.Text = $"Header {headerPosition}";
         }
 
-        public override RecyclerView.ViewHolder OnCreateHeaderViewHolder(ViewGroup parent)
+        public RecyclerView.ViewHolder OnCreateHeaderViewHolder(ViewGroup parent)
         {
             return CreateViewHolder(parent, (int) SectionType.Header) as RecyclerView.ViewHolder;
         }

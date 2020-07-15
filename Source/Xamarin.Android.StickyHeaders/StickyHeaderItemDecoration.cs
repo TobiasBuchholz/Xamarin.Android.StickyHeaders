@@ -7,13 +7,13 @@ namespace Xamarin.Android.StickyHeaders
 {
     public sealed class StickyHeaderItemDecoration : RecyclerView.ItemDecoration
     {
-        private readonly StickyHeaderAdapter _adapter;
+        private readonly IStickyHeaderAdapter _adapter;
         private int _currentStickyPosition = RecyclerView.NoPosition;
         private RecyclerView _recyclerView;
         private RecyclerView.ViewHolder _currentStickyHolder;
         private View _lastViewOverlappedByHeader;
 
-        public StickyHeaderItemDecoration(StickyHeaderAdapter adapter)
+        public StickyHeaderItemDecoration(IStickyHeaderAdapter adapter)
         {
             _adapter = adapter;
         }

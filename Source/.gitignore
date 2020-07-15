@@ -43,4 +43,4 @@ Resource.designer.cs
 */\*Undefined\*Tools
 .idea
 /.mfractor
-*/.vs
+.vs

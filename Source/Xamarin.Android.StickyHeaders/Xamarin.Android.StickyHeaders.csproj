@@ -67,9 +67,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionAdapter.cs" />
     <Compile Include="SectionHeader.cs" />
+    <Compile Include="SectionIndexAdapter.cs" />
     <Compile Include="SectionItem.cs" />
     <Compile Include="SectionType.cs" />
     <Compile Include="IStickyHeaderAdapter.cs" />
+    <Compile Include="SimpleItem.cs" />
     <Compile Include="StickyHeaderItemDecoration.cs" />
   </ItemGroup>
   <ItemGroup>

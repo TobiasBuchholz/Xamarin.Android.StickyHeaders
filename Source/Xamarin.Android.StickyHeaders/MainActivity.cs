@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.OS;
 using AndroidX.AppCompat.App;
@@ -16,15 +17,21 @@ namespace Xamarin.Android.StickyHeaders
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
             
+            // InitWithSectionAdapter();
+            InitWithSectionIndexAdapter();
+        }
+
+        private void InitWithSectionAdapter()
+        {
             var recyclerView = FindViewById<RecyclerView>(Resource.Id.recyclerview);
             recyclerView.SetLayoutManager(new LinearLayoutManager(this));
-            
+
             var dividerDecoration = new DividerItemDecoration(this, DividerItemDecoration.Vertical);
             recyclerView.AddItemDecoration(dividerDecoration);
-            
+
             var adapter = new SectionAdapter();
             recyclerView.SetAdapter(adapter);
-            
+
             var stickyHeaderDecoration = new StickyHeaderItemDecoration(adapter);
             stickyHeaderDecoration.AttachToRecyclerView(recyclerView);
 
@@ -49,6 +56,27 @@ namespace Xamarin.Android.StickyHeaders
             }
 
             adapter.Items = items;
+            adapter.NotifyDataSetChanged();
+        }
+        
+        private void InitWithSectionIndexAdapter()
+        {
+            var recyclerView = FindViewById<RecyclerView>(Resource.Id.recyclerview);
+            recyclerView.SetLayoutManager(new LinearLayoutManager(this));
+
+            var dividerDecoration = new DividerItemDecoration(this, DividerItemDecoration.Vertical);
+            recyclerView.AddItemDecoration(dividerDecoration);
+
+            var adapter = new SectionIndexAdapter<SimpleItem>();
+            recyclerView.SetAdapter(adapter);
+
+            var stickyHeaderDecoration = new StickyHeaderItemDecoration(adapter);
+            stickyHeaderDecoration.AttachToRecyclerView(recyclerView);
+
+            var items = Enumerable.Range(0, 15).Select(x => new SimpleItem($"Item #{x}")).ToList();
+            var sectionIndexes = new[] { 0, 4, 6 };
+            adapter.Items = items;
+            adapter.SectionIndexes = sectionIndexes;
             adapter.NotifyDataSetChanged();
         }
     }

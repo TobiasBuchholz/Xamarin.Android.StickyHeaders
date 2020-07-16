@@ -7,50 +7,60 @@ namespace Xamarin.Android.StickyHeaders
 {
     public sealed class SimpleItemAdapter : RecyclerView.Adapter, IStickyHeaderAdapter
     {
-        private const int ViewTypeHeader = 0;
-        private const int ViewTypeItem = 1;
-        
         private readonly SectionIndexAdapterDelegate<SimpleItem> _adapterDelegate;
 
         public SimpleItemAdapter()
         {
-            _adapterDelegate = new SectionIndexAdapterDelegate<SimpleItem>();
+            _adapterDelegate = new SectionIndexAdapterDelegate<SimpleItem>(
+                CreateHeaderViewHolder,
+                CreateItemViewHolder,
+                BindHeaderViewHolder,
+                BindItemViewHolder);
         }
 
+        private static RecyclerView.ViewHolder CreateHeaderViewHolder(ViewGroup parent)
+        {
+            return new HeaderViewHolder(LayoutInflater.From(parent.Context).Inflate(Resource.Layout.recycler_view_header_item, parent, false));
+        }
+        
+        private static RecyclerView.ViewHolder CreateItemViewHolder(ViewGroup parent)
+        {
+            return new ItemViewHolder(LayoutInflater.From(parent.Context).Inflate(Resource.Layout.recycler_view_item, parent, false));
+        }
+
+        private static void BindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, SimpleItem item)
+        {
+            ((HeaderViewHolder) viewHolder).TextView.Text = $"Header for: {item.Title}";
+        }
+
+        private static void BindItemViewHolder(RecyclerView.ViewHolder viewHolder, SimpleItem item)
+        {
+            ((ItemViewHolder) viewHolder).TextView.Text = item.Title;
+        }
+        
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            var inflater = LayoutInflater.From(parent.Context);
-            if(viewType == ViewTypeHeader) {
-                return new HeaderViewHolder(inflater.Inflate(Resource.Layout.recycler_view_header_item, parent, false));
-            } 
-            return new ItemViewHolder(inflater.Inflate(Resource.Layout.recycler_view_item, parent, false));
+            return _adapterDelegate.OnCreateViewHolder(parent, viewType);
         }
 
         public RecyclerView.ViewHolder OnCreateHeaderViewHolder(ViewGroup parent)
         {
-            return CreateViewHolder(parent, ViewTypeHeader) as RecyclerView.ViewHolder;
+            return CreateViewHolder(parent, SectionIndexAdapterDelegate.ViewTypeHeader) as RecyclerView.ViewHolder;
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            var item = _adapterDelegate.GetItem(position);
-            
-            if(_adapterDelegate.IsHeader(position)) {
-                ((HeaderViewHolder) holder).TextView.Text = $"Header for: {item.Title}";
-            } else {
-                ((ItemViewHolder) holder).TextView.Text = item.Title;
-            }
+            _adapterDelegate.OnBindViewHolder(holder, position);
         }
 
         public void OnBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int headerPosition)
         {
-            var item = _adapterDelegate.GetItem(headerPosition);
-            ((HeaderViewHolder) viewHolder).TextView.Text = $"Header for: {item.Title}";
+            BindHeaderViewHolder(viewHolder, _adapterDelegate.GetItem(headerPosition));
         }
 
         public override int GetItemViewType(int position)
         {
-            return _adapterDelegate.IsHeader(position) ? ViewTypeHeader : ViewTypeItem;
+            return _adapterDelegate.GetItemViewType(position);
         }
 
         public override int ItemCount => _adapterDelegate.ItemCount;
